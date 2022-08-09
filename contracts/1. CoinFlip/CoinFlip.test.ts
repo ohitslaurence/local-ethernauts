@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import helper from "./CoinFlipHelper"
+import { helper, helperWithContract } from "./CoinFlipHelper";
 
 let victim: any;
 let attacker: any;
@@ -13,9 +13,14 @@ describe("Attacking CoinFlip", function () {
     attacker = await Attacker.deploy(victim.address);
   });
 
-  // Get this to pass!
-  it("Succesfully guessess the correct outcome 10 times in a row", async () => {
+  it("Succesfully guessess the correct outcome 10 times in a row using ethers", async () => {
     await helper(victim, attacker);
+    const consecutiveWins = await victim.consecutiveWins();
+    expect(consecutiveWins).to.be.equal(10);
+  });
+
+  it("Succesfully guessess the correct outcome 10 times in a row using contract", async () => {
+    await helperWithContract(victim, attacker);
     const consecutiveWins = await victim.consecutiveWins();
     expect(consecutiveWins).to.be.equal(10);
   });
